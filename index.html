@@ -422,65 +422,79 @@
                   assessment.
                 </p>
                 <form
-                  id="leadForm"
-                  action="/submit"
-                  method="POST"
-                  data-form-id="fc747bae-af65-41ea-bda3-90b7df5e4b6e"
-                  class="hero-capture__form"
-                >
-                  <div class="hero-capture__input-group">
-                    <label for="hero-name" class="hero-capture__label">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="hero-name"
-                      name="true"
-                      required="true"
-                      placeholder="John Doe"
-                      data-form-field-id="hero-name"
-                      class="hero-capture__input"
-                    />
-                  </div>
-                  <div class="hero-capture__input-group">
-                    <label for="hero-email" class="hero-capture__label">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="hero-email"
-                      name="email"
-                      required="true"
-                      placeholder="john@example.com"
-                      data-form-field-id="hero-email"
-                      class="hero-capture__input"
-                    />
-                  </div>
-                  <button
-                    id="thq_button_WHwC"
-                    name="button"
-                    type="submit"
-                    data-form-field-id="thq_button_WHwC"
-                    class="btn-lg hero-capture__submit btn btn-primary"
-                  >
-                    <span>Start My Journey</span>
-                    <svg
-                      width="24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M5 12h14m-7-7l7 7l-7 7"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                </form>
+  id="leadForm"
+  class="hero-capture__form"
+>
+  <div class="hero-capture__input-group">
+    <label for="hero-name" class="hero-capture__label">Full Name</label>
+    <input
+      type="text"
+      id="hero-name"
+      name="name"
+      required
+      placeholder="John Doe"
+      class="hero-capture__input"
+    />
+  </div>
+
+  <div class="hero-capture__input-group">
+    <label for="hero-email" class="hero-capture__label">Email Address</label>
+    <input
+      type="email"
+      id="hero-email"
+      name="email"
+      required
+      placeholder="john@example.com"
+      class="hero-capture__input"
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="btn-lg hero-capture__submit btn btn-primary"
+  >
+    <span>Start My Journey</span>
+  </button>
+
+  <!-- MENSAJE DE RESPUESTA -->
+  <p id="formMessage" style="display:none;margin-top:16px;"></p>
+</form>
+<script>
+  const form = document.getElementById('leadForm');
+  const message = document.getElementById('formMessage');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    message.style.display = 'none';
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('https://formspree.io/f/xgoleepo', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        message.style.display = 'block';
+        message.style.color = '#2e7d32';
+        message.textContent = '✅ Thanks! We’ve received your request and will contact you shortly.';
+        form.reset();
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      message.style.display = 'block';
+      message.style.color = '#c62828';
+      message.textContent = '❌ Something went wrong. Please try again later.';
+    }
+  });
+</script>
+
                 <div
                   id="formSuccess"
                   class="home-thq-hero-capturesuccess-message-elm hero-capture__success-message"
